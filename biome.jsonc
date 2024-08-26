@@ -10,10 +10,24 @@
   "linter": {
     "enabled": true,
     "rules": { "recommended": true },
-    "ignore": ["/public/draco/gltf/*.js", "/public/draco/gltf/*.wasm"]
+    "ignore": [
+      "**/public/**/*",
+      "**/dist/**/*",
+      "**/node_modules/**/*",
+      "**/.astro/**/*",
+      "**/.github/**/*",
+      "**/.husky/**/*"
+    ]
   },
   "overrides": [{ "include": ["*.astro"] }],
   "files": {
-    "ignore": ["/public/draco/gltf/*.js", "/public/draco/gltf/*.wasm"]
+    "ignore": [
+      "**/public/**/*",
+      "**/dist/**/*",
+      "**/node_modules/**/*",
+      "**/.astro/**/*",
+      "**/.github/**/*",
+      "**/.husky/**/*"
+    ]
   }
 }
