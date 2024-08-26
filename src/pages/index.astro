@@ -3,5 +3,52 @@ import BaseLayout from "~/layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="Abrahams Portfolio" description="Abrahams Portfolio">
-  <h1>Hello, world!</h1>
+  <div class="first-col">
+    <div id="containerAbraham" class="model"></div>
+    <h1>Abrahams Portfolio</h1>
+  </div>
+  
 </BaseLayout>
+
+<script>
+  import ShowAbrahamsModel from '~/scripts/showAbrahamsModel';
+
+  const abrahamsModel = new ShowAbrahamsModel();
+  console.log(abrahamsModel, 'abrahamsModel');
+</script>
+
+<style>
+  h1 { 
+    font-size: 25px;
+    font-family: 'Courier New', Courier, monospace; 
+  }
+
+  .first-col{
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    max-width: 1200px;
+    margin: auto;
+  }
+
+  .first-col .model, .first-col h1 {
+    width: 50%;
+  }
+
+  .first-col .model{
+    cursor: grab;
+  }
+  @media screen and (max-width: 800px) {
+    .first-col .model, .first-col h1 {
+      width: 100%;
+      }
+
+    .first-col{
+      display: flex;
+      flex-direction: column-reverse;
+      width: 100%;
+      margin: auto;
+    }
+  }
+
+</style>
