@@ -73,30 +73,36 @@ export default class ShowAbrahamsModel {
     this.renderer.render(this.scene, this.camera);
 
     this.doneRender = true;
-    console.log('doneRender')
+    console.log("doneRender");
   }
 
   loadAbrahamsModel() {
     const loader = new GLTFLoader();
-    loader.load("/models/abrahamsModel.glb", (gltf) => {
-      this.model = gltf.scene.children[0];
-      this.model.scale.set(40, 40, 40);
-      this.model.rotation.x = Math.PI / 1.9;
-      this.model.rotation.y = 0.1;
-      this.model.rotation.z = 50;
-      this.scene.add(this.model);
+    loader.load(
+      "/models/abrahamsModel.glb",
+      (gltf) => {
+        this.model = gltf.scene.children[0];
+        this.model.scale.set(40, 40, 40);
+        this.model.rotation.x = Math.PI / 1.9;
+        this.model.rotation.y = 0.1;
+        this.model.rotation.z = 50;
+        this.scene.add(this.model);
 
-      this.extractGeometryForParticles(this.model);
+        this.extractGeometryForParticles(this.model);
 
-      this.waitForModelToRender();
-    }, (xhr) => {
-      this.percentLoading = Math.round((xhr.loaded / xhr.total) * 100);
-      console.log(`Loading model: ${this.percentLoading}%`);
+        this.waitForModelToRender();
+      },
+      (xhr) => {
+        this.percentLoading = Math.round((xhr.loaded / xhr.total) * 100);
+        console.log(`Loading model: ${this.percentLoading}%`);
 
-      document.getElementById("loader-text").innerText = `Loading model: ${this.percentLoading}%`;
-    }, (error) => {
-      console.error("Error loading model:", error);
-    });
+        document.getElementById("loader-text").innerText =
+          `Loading model: ${this.percentLoading}%`;
+      },
+      (error) => {
+        console.error("Error loading model:", error);
+      },
+    );
   }
 
   extractGeometryForParticles() {
@@ -257,9 +263,9 @@ export default class ShowAbrahamsModel {
     requestAnimationFrame(() => this.animate());
 
     if (this.model) {
-      this.model.rotation.y += 0.0007; 
-      this.model.rotation.z += 0.0007; 
-      this.model.rotation.x += 0.0004; 
+      this.model.rotation.y += 0.0007;
+      this.model.rotation.z += 0.0007;
+      this.model.rotation.x += 0.0004;
     }
 
     this.frameCount++;
