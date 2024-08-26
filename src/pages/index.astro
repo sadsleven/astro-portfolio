@@ -13,9 +13,7 @@ import BaseLayout from "~/layouts/BaseLayout.astro";
 
 <script>
   import ShowAbrahamsModel from '~/scripts/showAbrahamsModel';
-
-  const abrahamsModel = new ShowAbrahamsModel();
-  console.log(abrahamsModel, 'abrahamsModel');
+  new ShowAbrahamsModel('/models/abrahamsModel.glb' ,"containerAbraham");
 </script>
 
 <style>
@@ -28,6 +26,7 @@ import BaseLayout from "~/layouts/BaseLayout.astro";
     display: flex;
     justify-content: center;
     justify-items: center;
+    flex-wrap: wrap;
     max-width: 1200px;
     margin: auto;
   }

@@ -1,10 +1,11 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 export default class ShowAbrahamsModel {
-  constructor() {
-    this.container = document.getElementById("containerAbraham");
+  constructor(pathModel, idContainer) {
+    this.container = document.getElementById(idContainer);
 
     this.frameCount = 0;
     this.vertexDisplacement = 0.0;
@@ -18,6 +19,7 @@ export default class ShowAbrahamsModel {
     this.windowHeight = 0;
     this.percentLoading = 0;
     this.doneRender = false;
+    this.pathModel = pathModel;
 
     this.init();
     this.startAnimation();
@@ -73,13 +75,17 @@ export default class ShowAbrahamsModel {
     this.renderer.render(this.scene, this.camera);
 
     this.doneRender = true;
-    console.log("doneRender");
+    console.log("doneRender", this.pathModel);
   }
 
   loadAbrahamsModel() {
+    const dracoLoader = new DRACOLoader();
     const loader = new GLTFLoader();
+    dracoLoader.setDecoderPath("/draco/gltf/");
+    loader.setDRACOLoader(dracoLoader);
+
     loader.load(
-      "/models/abrahamsModel.glb",
+      this.pathModel,
       (gltf) => {
         this.model = gltf.scene.children[0];
         this.model.scale.set(40, 40, 40);
@@ -94,7 +100,7 @@ export default class ShowAbrahamsModel {
       },
       (xhr) => {
         this.percentLoading = Math.round((xhr.loaded / xhr.total) * 100);
-        console.log(`Loading model: ${this.percentLoading}%`);
+        console.log(`Loading model: ${this.percentLoading}%`, this.pathModel);
 
         document.getElementById("loader-text").innerText =
           `Loading model: ${this.percentLoading}%`;
@@ -131,8 +137,7 @@ export default class ShowAbrahamsModel {
 
   setupOrbitControls() {
     const controls = new OrbitControls(this.camera, this.renderer.domElement);
-    controls.minDistance = 120;
-    controls.maxDistance = 120;
+    controls.enableZoom = false;
   }
 
   addResizeListener() {
