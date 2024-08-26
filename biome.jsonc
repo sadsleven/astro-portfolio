@@ -7,6 +7,13 @@
     "lineEnding": "lf"
   },
   "organizeImports": { "enabled": true },
-  "linter": { "enabled": true, "rules": { "recommended": true } },
-  "overrides": [{ "include": ["*.astro"] }]
+  "linter": {
+    "enabled": true,
+    "rules": { "recommended": true },
+    "ignore": ["/public/draco/gltf/*.js", "/public/draco/gltf/*.wasm"]
+  },
+  "overrides": [{ "include": ["*.astro"] }],
+  "files": {
+    "ignore": ["/public/draco/gltf/*.js", "/public/draco/gltf/*.wasm"]
+  }
 }
