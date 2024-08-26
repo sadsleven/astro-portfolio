@@ -16,7 +16,8 @@ export default class ShowAbrahamsModel {
     this.indexBuild = 0;
     this.windowWidth = 0;
     this.windowHeight = 0;
-    this.loadingModel = true;
+    this.percentLoading = 0;
+    this.doneRender = false;
 
     this.init();
     this.startAnimation();
@@ -67,6 +68,14 @@ export default class ShowAbrahamsModel {
     this.container.appendChild(this.renderer.domElement);
   }
 
+  waitForModelToRender() {
+    this.renderer.compile(this.scene, this.camera);
+    this.renderer.render(this.scene, this.camera);
+
+    this.doneRender = true;
+    console.log('doneRender')
+  }
+
   loadAbrahamsModel() {
     const loader = new GLTFLoader();
     loader.load("/models/abrahamsModel.glb", (gltf) => {
@@ -78,6 +87,15 @@ export default class ShowAbrahamsModel {
       this.scene.add(this.model);
 
       this.extractGeometryForParticles(this.model);
+
+      this.waitForModelToRender();
+    }, (xhr) => {
+      this.percentLoading = Math.round((xhr.loaded / xhr.total) * 100);
+      console.log(`Loading model: ${this.percentLoading}%`);
+
+      document.getElementById("loader-text").innerText = `Loading model: ${this.percentLoading}%`;
+    }, (error) => {
+      console.error("Error loading model:", error);
     });
   }
 
@@ -239,9 +257,9 @@ export default class ShowAbrahamsModel {
     requestAnimationFrame(() => this.animate());
 
     if (this.model) {
-      this.model.rotation.y += 0.0007; // Rotate the model around the Y-axis
-      this.model.rotation.z += 0.0007; // Rotate the model around the Y-axis
-      this.model.rotation.x += 0.0007; // Rotate the model around the Y-axis
+      this.model.rotation.y += 0.0007; 
+      this.model.rotation.z += 0.0007; 
+      this.model.rotation.x += 0.0004; 
     }
 
     this.frameCount++;
