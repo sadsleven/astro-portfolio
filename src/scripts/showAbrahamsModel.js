@@ -9,21 +9,21 @@ export default class ShowAbrahamsModel {
     this.frameCount = 0;
     this.vertexDisplacement = 0.00;
     this.animatingDestroy = false;
-    this.animatingDestroyTop = false;
     this.delay = 0;
     this.getBackNormalVertices = [];
     this.goingCrazy = false;
     this.animatingBuild = false;
     this.indexBuild = 0;
-
-    this.firstDestroy = null;
-    this.firsBuild = null;
+    this.windowWidth = 0;
+    this.windowHeight = 0;
+    this.loadingModel = true;
 
     this.init();
     this.startAnimation();
   }
   
   init() {
+    this.setWindowSize();
     this.createScene();
     this.createLights();
     this.createCamera();
@@ -31,6 +31,13 @@ export default class ShowAbrahamsModel {
     this.loadAbrahamsModel();
     this.setupOrbitControls();
     this.addResizeListener();
+  }
+
+  setWindowSize() {
+    this.windowWidth = window.innerWidth > 1200
+                        ? 600
+                        : window.innerWidth;
+    this.windowHeight = this.windowWidth;
   }
 
   createScene() {
@@ -51,14 +58,14 @@ export default class ShowAbrahamsModel {
   }
 
   createCamera() {
-    const aspect = window.innerWidth / window.innerHeight;
+    const aspect = this.windowWidth / this.windowHeight;
     this.camera = new THREE.PerspectiveCamera(45, aspect, 1, 1000);
     this.camera.position.z = 120;
   }
 
   setupRenderer() {
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setSize(this.windowWidth, this.windowHeight);
     this.container.appendChild(this.renderer.domElement);
   }
 
@@ -66,13 +73,14 @@ export default class ShowAbrahamsModel {
     const loader = new GLTFLoader();
     loader.load('/models/abrahamsModel.glb', (gltf) => {
       this.model = gltf.scene.children[0]; 
-      this.model.scale.set(35, 35, 35);
+      this.model.scale.set(40, 40, 40);
       this.model.rotation.x = Math.PI / 1.9; 
       this.model.rotation.y = .1; 
       this.model.rotation.z = 50;  
       this.scene.add(this.model);
 
       this.extractGeometryForParticles(this.model);
+      
     });
   }
 
@@ -108,8 +116,9 @@ export default class ShowAbrahamsModel {
 
   addResizeListener() {
     window.addEventListener('resize', () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      this.setWindowSize();
+      const width = this.windowWidth;
+      const height = this.windowHeight;
       this.camera.aspect = width / height;
       this.camera.updateProjectionMatrix();
       this.renderer.setSize(width, height);
@@ -128,21 +137,13 @@ export default class ShowAbrahamsModel {
     const positionAttribute = this.geometry.getAttribute('position');
     const vertices = positionAttribute.array;
 
-    console.log(this.vertexDisplacement, 'this.vertexDisplacement')
-
-    const originalVertices = []//JSON.parse(JSON.stringify(vertices)); 
-    //console.log(originalVertices, 'originalVertices')
+    const originalVertices = [];
 
     for (let i = 0; i < vertices.length; i += 3) {
       originalVertices.push(vertices[i]);
       originalVertices.push(vertices[i + 1]);
       originalVertices.push(vertices[i + 2]);
       vertices[i] += Math.random() *  this.vertexDisplacement - ( this.vertexDisplacement / 2 );
-
-      if (!this.firstDestroy){
-        this.firstDestroy = vertices[i];
-      }
-
       vertices[i + 1] += Math.random() *  this.vertexDisplacement - ( this.vertexDisplacement / 2 );
       vertices[i + 2] += Math.random() *  this.vertexDisplacement - ( this.vertexDisplacement / 2 );
     }
@@ -162,17 +163,10 @@ export default class ShowAbrahamsModel {
 
     const positionAttribute = this.geometry.getAttribute('position');
     const vertices = positionAttribute.array;
-    console.log(this.getBackNormalVertices[this.indexBuild].order)
+
     for (let i = 0; i < vertices.length; i++) {
-      vertices[i] += this.getBackNormalVertices[this.indexBuild].vertices[i];
-
-      if (i + 1 === vertices.length && ){
-        console.log(this.firstDestroy, )
-      }
+      vertices[i] = this.getBackNormalVertices[this.indexBuild].vertices[i];
     }
-
-    //console.log(this.getBackNormalVertices[this.indexBuild].vertices.length, positionAttribute.array.length, 'buildModel')
-    //positionAttribute.array = this.getBackNormalVertices[this.indexBuild].vertices
 
     this.geometry.attributes.position.needsUpdate = true;
   }
@@ -182,27 +176,19 @@ export default class ShowAbrahamsModel {
       return;
     }
 
-    if (this.delay < 1){
+    // Test to optimize
+    /*if (this.delay < 1){
       this.delay++;
       return;
     } else {
       this.delay = 0;
-    }
+    }*/
 
-    if (this.vertexDisplacement < 0.03 && !this.animatingDestroyTop) {
+    if (this.vertexDisplacement < 0.06) {
       this.vertexDisplacement += 0.005;
     } 
 
-    if (this.animatingDestroyTop) {
-      this.vertexDisplacement -= 0.005;
-    }
-
-    if (this.vertexDisplacement >= 0.03) {
-      this.animatingDestroyTop = true;
-    }
-
-    if (this.vertexDisplacement <= 0.00) {
-      this.animatingDestroyTop = false;
+    if (this.vertexDisplacement >= 0.06) {
       this.animatingDestroy = false;
     }
 
@@ -219,12 +205,13 @@ export default class ShowAbrahamsModel {
       return;
     }
     
-    if (this.delay < 1){
+    // Test to optimize
+    /*if (this.delay < 1){
       this.delay++;
       return;
     } else {
       this.delay = 0;
-    }
+    }*/
 
     this.buildModel();
     this.indexBuild++
@@ -232,10 +219,12 @@ export default class ShowAbrahamsModel {
 
 
   handleSetMode () {
-    if (this.frameCount % 500 === 0) {
+    if (this.frameCount % 300 === 0) {
       this.goingCrazy = !this.goingCrazy;
 
       if (this.goingCrazy){
+        this.getBackNormalVertices = [];
+        this.vertexDisplacement = 0;
         this.animatingDestroy = true;
       }
 
