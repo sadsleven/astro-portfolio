@@ -39,7 +39,8 @@ import BaseLayout from "~/layouts/BaseLayout.astro";
   .first-col .model{
     cursor: grab;
   }
-  @media screen and (max-width: 800px) {
+
+  @media screen and (width <= 800px) {
     .first-col .model, .first-col h1 {
       width: 100%;
       }
