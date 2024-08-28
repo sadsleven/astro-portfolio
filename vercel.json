@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "cors": {
+    "allowOrigins": ["*"],
+    "allowMethods": ["GET", "HEAD", "POST", "OPTIONS"],
+    "allowHeaders": ["Content-Type"],
+    "maxAge": 86400
+  }
+}
