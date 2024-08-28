@@ -100,7 +100,13 @@ export default class ShowAbrahamsModel {
       },
       (xhr) => {
         this.percentLoading = Math.round((xhr.loaded / xhr.total) * 100);
-        console.log(`Loading model: ${this.percentLoading}%`, this.pathModel);
+        console.log(
+          `Loading model: ${this.percentLoading}%`,
+          this.pathModel,
+          xhr,
+          xhr.loaded,
+          xhr.total,
+        );
 
         document.getElementById("loader-text").innerText =
           `Loading model: ${this.percentLoading}%`;
