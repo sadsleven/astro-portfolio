@@ -1,0 +1,34 @@
+h1 { 
+font-size: 25px;
+font-family: 'Courier New', Courier, monospace; 
+}
+
+.row{
+display: flex;
+justify-content: center;
+justify-items: center;
+flex-wrap: wrap;
+max-width: 1200px;
+margin: auto;
+}
+
+.row .model, .row .text-container {
+width: 50%;
+}
+
+.row .model{
+cursor: grab;
+}
+
+@media screen and (width <= 800px) {
+.row .model, .row .text-container {
+    width: 100%;
+    }
+
+.row{
+    display: flex;
+    flex-direction: column-reverse;
+    width: 100%;
+    margin: auto;
+}
+}

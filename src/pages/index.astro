@@ -1,55 +1,42 @@
 ---
+import "~/styles/mainPage.css";
+import ItemProject from "~/components/ItemProject.astro";
+import projectsData from "~/data/projectsData.json";
+import type IProject from "~/interfaces/IProject";
 import BaseLayout from "~/layouts/BaseLayout.astro";
+
+const projects: IProject[] = projectsData;
 ---
 
 <BaseLayout title="Abrahams Portfolio" description="Abrahams Portfolio">
-  <div class="first-col">
+  <div class="row">
     <div id="containerAbraham" class="model"></div>
-    <h1>Abrahams Portfolio</h1>
+    <div class="text-container">
+      <h1>Abrahams Portfolio</h1>
+    </div>
   </div>
-  <div id="loader-text">Loading model: 0%</div>
-  
+
+  <ItemProject project={projects[0]} />
+  <ItemProject project={projects[1]} />
+  <ItemProject project={projects[2]} />
+  <ItemProject project={projects[3]} />
+  <ItemProject project={projects[4]} />
 </BaseLayout>
 
 <script>
   import ShowAbrahamsModel from '~/scripts/showAbrahamsModel';
-  new ShowAbrahamsModel('/models/abrahamsModel.glb' ,"containerAbraham");
+  import ShowPageModels from '~/scripts/showPageModels';
+  import type IProject from '~/interfaces/IProject';
+  import projectsData from '~/data/projectsData.json'
+  const projects: IProject[] = projectsData;
+
+  function initModels() {
+    new ShowAbrahamsModel('/models/abrahamsModel.glb' ,"containerAbraham");
+
+    projects.forEach(element => {
+      new ShowPageModels(element.modelPath, element.idContainer);
+    });
+  }
+
+  initModels();
 </script>
-
-<style>
-  h1 { 
-    font-size: 25px;
-    font-family: 'Courier New', Courier, monospace; 
-  }
-
-  .first-col{
-    display: flex;
-    justify-content: center;
-    justify-items: center;
-    flex-wrap: wrap;
-    max-width: 1200px;
-    margin: auto;
-  }
-
-  .first-col .model, .first-col h1 {
-    width: 50%;
-  }
-
-  .first-col .model{
-    cursor: grab;
-  }
-
-  @media screen and (width <= 800px) {
-    .first-col .model, .first-col h1 {
-      width: 100%;
-      }
-
-    .first-col{
-      display: flex;
-      flex-direction: column-reverse;
-      width: 100%;
-      margin: auto;
-    }
-  }
-
-</style>

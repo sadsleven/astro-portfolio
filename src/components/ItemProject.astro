@@ -1,0 +1,20 @@
+---
+import type IProject from "~/interfaces/IProject";
+
+interface Props {
+  project: IProject;
+}
+
+const { project } = Astro.props;
+---
+<div>
+    <div class="row">
+        <div id={ project.idContainer } class="model"></div>
+        <div>
+            <h1>{ project.nameProject }</h1>
+            <h3>{ project.roles }</h3>
+            <div>{ project.description }</div>
+            <div>{ project.date }</div>
+        </div>
+    </div>
+</div>

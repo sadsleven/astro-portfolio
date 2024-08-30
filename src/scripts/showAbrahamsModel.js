@@ -19,6 +19,7 @@ export default class ShowAbrahamsModel {
     this.windowHeight = 0;
     this.percentLoading = 0;
     this.doneRender = false;
+
     this.pathModel = pathModel;
 
     this.init();
@@ -100,7 +101,7 @@ export default class ShowAbrahamsModel {
       },
       (xhr) => {
         this.percentLoading = Math.round((xhr.loaded / xhr.total) * 100);
-        console.log(
+        /*console.log(
           `Loading model: ${this.percentLoading}%`,
           this.pathModel,
           xhr,
@@ -109,7 +110,7 @@ export default class ShowAbrahamsModel {
         );
 
         document.getElementById("loader-text").innerText =
-          `Loading model: ${this.percentLoading}%`;
+          `Loading model: ${this.percentLoading}%`;*/
       },
       (error) => {
         console.error("Error loading model:", error);
