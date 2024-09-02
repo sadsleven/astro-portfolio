@@ -18,19 +18,19 @@
   "dependencies": {
     "@astrojs/check": "^0.9.3",
     "@astrojs/sitemap": "^3.1.6",
-    "astro": "^4.14.2",
+    "astro": "^4.15.2",
     "scss": "^0.2.4",
     "smartypants": "^0.2.2",
-    "three": "^0.167.1",
+    "three": "^0.168.0",
     "typescript": "^5.5.4"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
     "autoprefixer": "^10.4.20",
     "cssnano": "^7.0.5",
-    "husky": "^9.1.4",
+    "husky": "^9.1.5",
     "sharp": "^0.33.5",
-    "stylelint": "^16.8.2",
+    "stylelint": "^16.9.0",
     "stylelint-config-astro": "^1.0.4",
     "stylelint-config-standard": "^36.0.1",
     "stylelint-config-standard-scss": "^13.1.0"
