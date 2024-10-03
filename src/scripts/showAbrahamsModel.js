@@ -7,6 +7,7 @@ export default class ShowAbrahamsModel {
   constructor(pathModel, idContainer) {
     this.container = document.getElementById(idContainer);
 
+    this.animating = false;
     this.frameCount = 0;
     this.vertexDisplacement = 0.0;
     this.animatingDestroy = false;
@@ -24,6 +25,7 @@ export default class ShowAbrahamsModel {
 
     this.init();
     this.startAnimation();
+    this.addListenerShow();
   }
 
   init() {
@@ -272,24 +274,58 @@ export default class ShowAbrahamsModel {
   }
 
   animate() {
-    requestAnimationFrame(() => this.animate());
+    if (this.animating) {
+      requestAnimationFrame(() => this.animate());
 
-    if (this.model) {
-      this.model.rotation.y += 0.0007;
-      this.model.rotation.z += 0.0007;
-      this.model.rotation.x += 0.0004;
+      if (this.model) {
+        this.model.rotation.y += 0.0007;
+        this.model.rotation.z += 0.0007;
+        this.model.rotation.x += 0.0004;
+      }
+
+      this.frameCount++;
+
+      this.handleSetMode();
+      this.handleDestroy();
+      this.handleBuild();
+
+      //console.log(this.pathModel, 'animate')
+
+      this.renderer.render(this.scene, this.camera);
     }
-
-    this.frameCount++;
-
-    this.handleSetMode();
-    this.handleDestroy();
-    this.handleBuild();
-
-    this.renderer.render(this.scene, this.camera);
   }
 
   startAnimation() {
     this.animate();
+  }
+
+  pauseAnimation() {
+    this.animating = false;
+  }
+
+  resumeAnimation() {
+    this.animating = true;
+    this.animate();
+  }
+
+  addListenerShow() {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            this.resumeAnimation();
+          }
+
+          if (!entry.isIntersecting) {
+            this.pauseAnimation();
+          }
+        }
+      },
+      { threshold: 0 },
+    );
+
+    if (this.container) {
+      observer.observe(this.container);
+    }
   }
 }
